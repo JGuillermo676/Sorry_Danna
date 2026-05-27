@@ -42,7 +42,7 @@ p{
 font-size:18px;
 }
 
-/* botones estilo móvil */
+/* botones */
 button{
 padding:16px 22px;
 font-size:18px;
@@ -52,6 +52,7 @@ cursor:pointer;
 margin:10px;
 width:80%;
 max-width:280px;
+transition:0.2s;
 }
 
 /* tarjeta */
@@ -144,16 +145,31 @@ document.getElementById(id)
 .classList.add('activa');
 }
 
-/* botón esquivo */
-const noBtn=document.getElementById("noBtn");
+/* BOTÓN NO (PC + MÓVIL) */
+const noBtn = document.getElementById("noBtn");
 
-noBtn.addEventListener("mouseover",()=>{
-let x=Math.random()*200-100;
-let y=Math.random()*200-100;
-noBtn.style.transform=`translate(${x}px,${y}px)`;
+function moverBoton(){
+let x = Math.random() * 200 - 100;
+let y = Math.random() * 200 - 100;
+noBtn.style.transform = `translate(${x}px, ${y}px)`;
+}
+
+/* PC */
+noBtn.addEventListener("mouseover", moverBoton);
+
+/* MÓVIL */
+noBtn.addEventListener("touchstart", function(e){
+e.preventDefault();
+moverBoton();
 });
 
-/* final */
+/* también click por seguridad */
+noBtn.addEventListener("click", function(e){
+e.preventDefault();
+moverBoton();
+});
+
+/* FINAL CON CORAZONES */
 function final(){
 cambiar('p5');
 
