@@ -19,6 +19,7 @@ height:100vh;
 display:flex;
 justify-content:center;
 align-items:center;
+flex-direction:column;
 }
 
 /* pantallas */
@@ -74,17 +75,45 @@ font-size:30px;
 position:absolute;
 font-size:24px;
 animation:caer 4s linear forwards;
+pointer-events:none;
 }
 
 @keyframes caer{
-0%{transform:translateY(-100px);}
-100%{transform:translateY(110vh);opacity:0;}
+0%{
+transform:translateY(-100px);
+opacity:1;
+}
+100%{
+transform:translateY(110vh);
+opacity:0;
+}
+}
+
+/* mensaje visitas */
+#mensajeVisita{
+font-size:18px;
+font-weight:bold;
+margin-top:20px;
+padding:0 20px;
+white-space:pre-line;
+}
+
+/* contador */
+#contadorGlobal{
+margin-top:10px;
+font-size:16px;
 }
 
 </style>
 </head>
 
 <body>
+
+<!-- 👤 MENSAJE VISITA -->
+<p id="mensajeVisita"></p>
+
+<!-- 🌍 CONTADOR GLOBAL -->
+<h4 id="contadorGlobal">Cargando visitas...</h4>
 
 <!-- P1 -->
 <div id="p1" class="pantalla activa">
@@ -137,21 +166,28 @@ animation:caer 4s linear forwards;
 
 <script>
 
+/* CAMBIAR PANTALLAS */
 function cambiar(id){
+
 document.querySelectorAll('.pantalla')
 .forEach(p=>p.classList.remove('activa'));
 
 document.getElementById(id)
 .classList.add('activa');
+
 }
 
 /* BOTÓN NO (PC + MÓVIL) */
 const noBtn = document.getElementById("noBtn");
 
 function moverBoton(){
+
 let x = Math.random() * 200 - 100;
 let y = Math.random() * 200 - 100;
-noBtn.style.transform = `translate(${x}px, ${y}px)`;
+
+noBtn.style.transform =
+`translate(${x}px, ${y}px)`;
+
 }
 
 /* PC */
@@ -159,29 +195,137 @@ noBtn.addEventListener("mouseover", moverBoton);
 
 /* MÓVIL */
 noBtn.addEventListener("touchstart", function(e){
+
 e.preventDefault();
+
 moverBoton();
+
 });
 
-/* también click por seguridad */
+/* CLICK */
 noBtn.addEventListener("click", function(e){
+
 e.preventDefault();
+
 moverBoton();
+
 });
 
 /* FINAL CON CORAZONES */
 function final(){
+
 cambiar('p5');
 
 for(let i=0;i<50;i++){
-let c=document.createElement("div");
-c.className="corazon";
-c.innerHTML="❤️";
-c.style.left=Math.random()*100+"vw";
-c.style.animationDuration=(Math.random()*3+2)+"s";
+
+let c = document.createElement("div");
+
+c.className = "corazon";
+c.innerHTML = "❤️";
+
+c.style.left = Math.random()*100+"vw";
+
+c.style.animationDuration =
+(Math.random()*3+2)+"s";
+
 document.body.appendChild(c);
+
 }
+
 }
+
+/* 👤 VISITAS LOCALES */
+let visitas = localStorage.getItem("visitas") || 0;
+
+visitas++;
+
+localStorage.setItem("visitas", visitas);
+
+/* 💌 MENSAJES CADA 5 VISITAS */
+const mensajes = [
+
+"5 visitas... ya estás oficialmente atrapada 😳",
+
+"10 visitas... esto empieza a ser peligroso ❤️",
+
+"15 visitas... el sistema detecta demasiado amor 👀",
+
+"20 visitas... Guillermo agradece tu obsesión 😌",
+
+"25 visitas... nivel de ternura aumentado 💕",
+
+"30 visitas... ya casi eres administradora del sistema 😏",
+
+"35 visitas... el botón de NO sigue sin funcionar 😈",
+
+"40 visitas... análisis completado: estás enamorada ❤️",
+
+"45 visitas... demasiadas visitas para ser casualidad 👀",
+
+"50 visitas... mitad del camino desbloqueada 🎉",
+
+"55 visitas... el novio sigue sobreviviendo 🥺",
+
+"60 visitas... amor detectado en niveles críticos 🚨",
+
+"65 visitas... esta página ya es tu segunda casa 🏠❤️",
+
+"70 visitas... Danna.exe ha vuelto otra vez 😳",
+
+"75 visitas... el sistema ya te reconoce automáticamente 🤖💕",
+
+"80 visitas... imposible dejar de entrar aquí 😭❤️",
+
+"85 visitas... el amor supera todos los bugs 💋",
+
+"90 visitas... alerta máxima de cariño detectada 🚨❤️",
+
+"95 visitas... estamos cerca del secreto final 👀✨",
+
+`💯 100 VISITAS 💯
+❤️ SISTEMA COMPLETAMENTE ENAMORADO ❤️
+Gracias por volver tantas veces...
+Guillermo te quiere muchísimo Danna 🥺💕`
+
+];
+
+/* MOSTRAR MENSAJE */
+let indice = Math.floor(visitas / 5) - 1;
+
+if(indice < 0){
+
+document.getElementById("mensajeVisita")
+.innerText =
+"Primera visita... sistema activado 😳";
+
+}
+else if(indice >= mensajes.length){
+
+document.getElementById("mensajeVisita")
+.innerText =
+mensajes[mensajes.length - 1];
+
+}
+else{
+
+document.getElementById("mensajeVisita")
+.innerText =
+mensajes[indice];
+
+}
+
+/* 🌍 CONTADOR GLOBAL */
+fetch("https://api.countapi.xyz/hit/sistema-perdon-danna/visitas")
+
+.then(res=>res.json())
+
+.then(data=>{
+
+document.getElementById("contadorGlobal")
+.innerText =
+"💌 Visitas totales: " + data.value;
+
+});
 
 </script>
 
